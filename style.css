@@ -1,0 +1,141 @@
+/*TITRE PACMAN*/
+
+.title{
+    text-align: center;
+    font-family: 'Coda Caption', sans-serif;
+    font-size: 80px;
+}
+
+/* TAILLE DU JEU*/
+
+.map {
+    background-color: #0b0b0b;
+    width: 1000px;
+    height: 1000px;
+    position: relative;
+    margin: 0 auto;
+}
+
+
+/*MENU DE DEMARRAGE*/
+
+.menu {
+    background-image: url("img/menu.jpg");
+    background-size: cover;
+    width: 1500px;
+    height: 900px;
+    position: relative;
+    margin: 100px auto;
+}
+
+form{
+    text-align: center;
+}
+
+label{
+    color: white;
+    font-family: 'Coda Caption', sans-serif;
+    font-size: 30px;
+}
+
+input{
+    margin-top: 300px;
+    font-size: 30px;
+    padding: 10px;
+    border-radius: 5px;
+    background: transparent;
+    color: yellow;
+    font-family: 'Coda Caption', sans-serif;
+    border: solid white 3px;
+}
+
+/*SCORE*/
+
+.score{
+    font-size: 25px;
+    text-align: center;
+    font-family: 'Coda Caption', sans-serif;
+}
+/*JOUEUR*/
+
+.player{
+    font-size: 30px;
+    text-align: center;
+    font-family: 'Coda Caption', sans-serif;
+    color: red;
+}
+
+/*PERSONNAGES*/
+
+img[src="./img/pacman.gif"] {
+    position: absolute;
+    top: 500px;
+    left: 500px;
+}
+
+img[src="./img/redghost.png"] {
+    position: absolute;
+    top: 300px;
+    left: 400px;
+    width: 100px;
+}
+
+img[src="./img/blueghost.png"] {
+    position: absolute;
+    top: 300px;
+    left: 500px;
+    width: 100px;
+}
+
+img[src="./img/greenghost.png"] {
+    position: absolute;
+    top: 300px;
+    left: 600px;
+    width: 100px;
+}
+
+img[src="./img/background.svg"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1000px;
+    height: 1000px;
+}
+
+/*LES PADGOMMES*/
+
+.dot {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+
+.dot::before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ff6;
+}
+
+/*SENS DE ROTATION*/
+
+.toLeft {
+    transform: none;
+}
+
+.toTop {
+    transform: rotate(90deg);
+}
+
+.toRight {
+    transform: scale(-1, 1);
+}
+
+.toBottom {
+    transform: rotate(-90deg);
+}
