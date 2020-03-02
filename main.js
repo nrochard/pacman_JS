@@ -1,21 +1,59 @@
-// Référencement des personnages
+// Variables globales
 const map = document.querySelector('.map')
-const menu = document.querySelector('.menu')
 const pacMan = document.querySelector('img[src="./img/pacman.gif"]')
-const redGhost = document.querySelector('img[src="./img/redghost.png"]')
-const blueGhost = document.querySelector('img[src="./img/blueghost.png"]')
-const greenGhost = document.querySelector('img[src="./img/greenghost.png"]')
+const redGhost = document.querySelector('img[src="./img/redGhost.png"]')
+const pinkGhost = document.querySelector('img[src="./img/pinkGhost.png"]')
+const blueGhost = document.querySelector('img[src="./img/blueGhost.png"]')
+
+let score = 0
 
 let pacManInterval
 let redGhostInterval
 let blueGhostInterval
-let greenGhostInterval
+let pinkGhostInterval
 
-let score = 0;
 
 let currentRedGhostDirection
 
-const directions = ['toLeft', 'toRight', 'toTop', 'toBottom'];
+const directions = [ 'toLeft', 'toRight', 'toTop', 'toBottom' ]
+
+console.log('jeu lancé')
+
+const maxSize = 1000
+const mqlMaxWidth = matchMedia(`(max-width: ${maxSize}px)`)
+const mqlMaxHeight = matchMedia(`(max-height: ${maxSize}px)`)
+const mqlOrientation = matchMedia('(orientation: portrait)')
+
+const sizeUnit = () => {
+    let sizeUnit = 'px'
+    if (isSmallScreen()) {
+        sizeUnit = isPortraitOrientation() ? 'vw' : 'vh'
+    }
+    return sizeUnit
+}
+const isSmallScreen = () => {
+    const mql = isPortraitOrientation() ? mqlMaxWidth : mqlMaxHeight
+    return mql.matches
+}
+const isPortraitOrientation = () => {
+    const mql = mqlOrientation
+    return mql.matches
+}
+const pxToViewportSize = (px) => {
+    return 100 * px / maxSize
+}
+const rearrange = element => {
+    element.style.top = isSmallScreen() ? pxToViewportSize(element.dataset.top) + sizeUnit() : element.dataset.top + sizeUnit()
+    element.style.left = isSmallScreen() ? pxToViewportSize(element.dataset.left) + sizeUnit() : element.dataset.left + sizeUnit()
+}
+const rearrangeElements = () => {
+    elements = document.querySelectorAll('[data-top][data-left]')
+    elements.forEach(element => rearrange(element))
+}
+
+mqlMaxWidth.addListener(e => rearrangeElements())
+mqlMaxHeight.addListener(e => rearrangeElements())
+mqlOrientation.addListener(e => rearrangeElements())
 
 const blockedSquaresToLeft = [
     { top: 0, left: 0 }, { top: 0, left: 500 },
@@ -73,261 +111,246 @@ const blockedSquaresToTop = [
 ]
 
 const getPositionOf = (element) => {
-    const top = parseInt(getComputedStyle(element, null).getPropertyValue('top'), 10)
-    const left = parseInt(getComputedStyle(element, null).getPropertyValue('left'), 10)
-    return {top, left}
+    // const top = parseInt(getComputedStyle(element, null).getPropertyValue('top'), 10)
+    // const left = parseInt(getComputedStyle(element, null).getPropertyValue('left'), 10)
+    const top = Number(element.dataset.top)
+    const left = Number(element.dataset.left)
+    return { top, left }
 }
 
-const checkDot = (pacManPosition) => {
-    console.log(pacManPosition);
-    return positionDot.some(square => {
-        const topsAreEquals = pacManPosition.top === square.top;
-        const leftsAreEquals = pacManPosition.left === square.left;
-        return topsAreEquals && leftsAreEquals})
+const isTheCharacterBlocked = (characterPositon, movingDirection) => {
+    let blockedSquares
+    switch (movingDirection) {
+        case 'toLeft':
+            blockedSquares = blockedSquaresToLeft
+            break
+        case 'toRight':
+            blockedSquares = blockedSquaresToRight
+            break
+        case 'toTop':
+            blockedSquares = blockedSquaresToTop
+            break
+        case 'toBottom':
+            blockedSquares = blockedSquaresToBottom
+            break
+    }
+
+    return blockedSquares.some(square => {
+        const topsAreEquals = characterPositon.top === square.top
+        const leftsAreEquals = characterPositon.left === square.left
+        return topsAreEquals && leftsAreEquals
+    })
 }
 
+// Mouvements du clavier
 const movePacMan = (to) => {
-
     clearInterval(pacManInterval)
+    
     pacMan.className = to
+
     let pacManPosition = getPositionOf(pacMan)
 
     pacManInterval = setInterval(() => {
+        // PACMAN MANGE LES PAC-GOMME SUR LESQUELLES IL PASSE
+        // créer variable let score tout haut du code
+        // Récupérer la position de Pac-Man
+        // Construire un tableau des positions de tous les points présents sur la carte :
+        //        - document.querySelectorAll('.dot')
+        //        - supprimer du document le .dot sur lesquelles se trouve Pac-Man, par exemple avec un .forEach()
+        // incrémenter le score
+
         if (!isTheCharacterBlocked(pacManPosition, to)) {
-            const dot = document.querySelectorAll(".dot").forEach(function (dot) {
-                if (dot.style.left === pacManPosition.left + "px" && dot.style.top === pacManPosition.top + "px" && dot.style.display !== "none" )
-                {
-                    score++;
-                    dot.style.display = "none";
+            move(pacMan, pacManPosition, to)
 
-                    document.getElementById('playerScore').innerHTML=score;
-                }
-            })
-            switch (to) {
-                case 'toLeft':
-                    pacMan.style.left = pacManPosition.left === 0 ? 900 + "px" :
-                        pacManPosition.left - 100 + "px"
-                    break
-                case 'toRight':
-                    pacMan.style.left = pacManPosition.left === 900 ? 0 :
-                        pacManPosition.left + 100 + "px"
-                    break
-                case 'toTop':
-                    pacMan.style.top = pacManPosition.top - 100 + "px"
-                    break
-                case 'toBottom':
-                    pacMan.style.top = pacManPosition.top + 100 + "px"
-                    break
-            }
             pacManPosition = getPositionOf(pacMan)
-        }
-    }, 300)
 
-    // Le personnage ne bougera que s’il n’est pas bloqué contre un mur
+            isGameOver()
+
+            const meal = removeDot(pacManPosition.top, pacManPosition.left)
+            if (meal) score++
+            console.log('score:', score)
+        }
+    }, 250)
 }
 
-const moveRedGhost = (to) => {
+const moveRedGhost = () => {
     clearInterval(redGhostInterval)
 
     let redGhostPosition = getPositionOf(redGhost)
 
-    const randomInt = Math.floor(Math.random()* 4)
-    const randomDirection = directions[randomInt]
+    const randomInt = Math.floor(Math.random() * 4)
+    const randomDirection = directions[randomInt] // Soit 'toLeft', 'toRight', 'toTop', 'toBottom'
 
-    // DEBUT BONUS
-    // let filtredDirections = directions.filter((direction) => {
-    // direction !== currentRedGhostDirection})
+    redGhostInterval = setInterval(() => {
+        currentRedGhostDirection = randomDirection
 
-    redGhostInterval = setInterval(()=> {
-        // currentRedGhostDirection = randomDirection
         if (!isTheCharacterBlocked(redGhostPosition, randomDirection)) {
-            switch (randomDirection) {
-                case 'toLeft':
-                    redGhost.style.left = redGhostPosition.left === 0 ? 900 + "px" :
-                        redGhostPosition.left - 100 + "px";
-                    break;
-                case 'toRight':
-                    redGhost.style.left = redGhostPosition.left === 900 ? 0 :
-                        redGhostPosition.left + 100 + "px";
-                    break;
-                case 'toTop':
-                    redGhost.style.top = redGhostPosition.top - 100 + "px";
-                    break;
-                case 'toBottom':
-                    redGhost.style.top = redGhostPosition.top + 100 + "px";
-                    break
-            }
+            move(redGhost, redGhostPosition, randomDirection)
             redGhostPosition = getPositionOf(redGhost)
         } else {
-            moveRedGhost()
+            moveRedGhost() // La fonction est relancée si le fantôme est bloqué
             return
         }
-    }, 300)
-};
+    }, 250)
+}
 
 
-const moveBlueGhost = (to) => {
+const moveBlueGhost = () => {
     clearInterval(blueGhostInterval)
 
     let blueGhostPosition = getPositionOf(blueGhost)
 
-    const randomInt = Math.floor(Math.random()* 4)
-    const randomDirection = directions[randomInt]
+    const randomInt = Math.floor(Math.random() * 4)
+    const randomDirection = directions[randomInt] // Soit 'toLeft', 'toRight', 'toTop', 'toBottom'
 
-    // DEBUT BONUS
-    // let filtredDirections = directions.filter((direction) => {
-    // direction !== currentRedGhostDirection})
+    blueGhostInterval = setInterval(() => {
+        currentBlueGhostDirection = randomDirection
 
-
-    blueGhostInterval = setInterval(()=> {
-        // currentRedGhostDirection = randomDirection
         if (!isTheCharacterBlocked(blueGhostPosition, randomDirection)) {
-            switch (randomDirection) {
-                case 'toLeft':
-                    blueGhost.style.left = blueGhostPosition.left === 0 ? 900 + "px" :
-                        blueGhostPosition.left - 100 + "px";
-                    break;
-                case 'toRight':
-                    blueGhost.style.left = blueGhostPosition.left === 900 ? 0 :
-                        blueGhostPosition.left + 100 + "px";
-                    break;
-                case 'toTop':
-                    blueGhost.style.top = blueGhostPosition.top - 100 + "px";
-                    break;
-                case 'toBottom':
-                    blueGhost.style.top = blueGhostPosition.top + 100 + "px";
-                    break
-            }
+            move(blueGhost, blueGhostPosition, randomDirection)
             blueGhostPosition = getPositionOf(blueGhost)
         } else {
-            moveBlueGhost();
-            return
-        }
-    }, 300)
-};
-
-const moveGreenGhost = (to) => {
-    clearInterval(greenGhostInterval)
-
-    let greenGhostPosition = getPositionOf(greenGhost)
-
-    const randomInt = Math.floor(Math.random()* 4)
-    const randomDirection = directions[randomInt]
-
-    // DEBUT BONUS
-    // let filtredDirections = directions.filter((direction) => {
-    // direction !== currentRedGhostDirection})
-
-
-    greenGhostInterval = setInterval(()=> {
-        // currentRedGhostDirection = randomDirection
-        if (!isTheCharacterBlocked(greenGhostPosition, randomDirection)) {
-            switch (randomDirection) {
-                case 'toLeft':
-                    greenGhost.style.left = greenGhostPosition.left === 0 ? 900 + "px" :
-                        greenGhostPosition.left - 100 + "px";
-                    break;
-                case 'toRight':
-                    greenGhost.style.left = greenGhostPosition.left === 900 ? 0 :
-                        greenGhostPosition.left + 100 + "px";
-                    break;
-                case 'toTop':
-                    greenGhost.style.top = greenGhostPosition.top - 100 + "px";
-                    break;
-                case 'toBottom':
-                    greenGhost.style.top = greenGhostPosition.top + 100 + "px";
-                    break
-            }
-            greenGhostPosition = getPositionOf(greenGhost)
-        } else {
-            moveGreenGhost();
+            moveBlueGhost() // La fonction est relancée si le fantôme est bloqué
             return
         }
     }, 250)
-};
+}
 
+
+const movePinkGhost = () => {
+    clearInterval(pinkGhostInterval)
+    pinkGhostInterval = setInterval(() => {
+        moveToPacMan(pinkGhost)
+    }, 500)
+}
+
+
+const move = (character, from, to) => {
+    switch (to) {
+        case 'toLeft':
+            character.dataset.left = from.left === 0 ? 900 : from.left - 100
+            character.style.left = isSmallScreen() ? pxToViewportSize(character.dataset.left) + sizeUnit() : character.dataset.left + sizeUnit()
+            break
+        case 'toRight':
+            character.dataset.left = from.left === 900 ? 0 : from.left + 100
+            character.style.left = isSmallScreen() ? pxToViewportSize(character.dataset.left) + sizeUnit() : character.dataset.left + sizeUnit()
+            break
+        case 'toTop':
+            character.dataset.top = from.top - 100
+            character.style.top = isSmallScreen() ? pxToViewportSize(character.dataset.top) + sizeUnit() : character.dataset.top + sizeUnit()
+            break
+        case 'toBottom':
+            character.dataset.top = from.top + 100
+            character.style.top = isSmallScreen() ? pxToViewportSize(character.dataset.top) + sizeUnit() : character.dataset.top + sizeUnit()
+            break
+    }
+}
+
+
+
+const moveToPacMan = (ghost) => {
+    const pacManPosition = getPositionOf(pacMan)
+    const ghostPosition = getPositionOf(ghost)
+    const delta = getDelta(pacManPosition, ghostPosition)
+    console.log('delta:', delta)
+    let direction
+    if (delta.top === delta.left) direction = [delta.topDirection, delta.leftDirection][Math.floor(Math.random() * 2)]
+    if (delta.topDirection === null) direction = delta.leftDirection
+    else if (delta.leftDirection === null) direction = delta.topDirection
+    else direction = delta.top < delta.left ? delta.topDirection : delta.leftDirection
+    
+    if (isTheCharacterBlocked(ghostPosition, direction)) {
+        direction = direction === delta.topDirection ? delta.leftDirection : delta.topDirection
+        if (direction === null) {
+            let otherDirections = directions.filter(direction => direction !== delta.topDirection && direction !== delta.leftDirection)
+            direction = otherDirections[Math.floor(Math.random() * 2)]
+        }
+        console.log('direction:', direction)
+    }
+
+    while (isTheCharacterBlocked(ghostPosition, direction)) {
+        let otherDirections = directions.filter(direction => direction !== delta.topDirection && direction !== delta.leftDirection)
+        direction = otherDirections[Math.floor(Math.random() * 2)]
+    }
+    move(ghost, ghostPosition, direction)
+}
+const getDelta = (pacManPosition, ghostPosition) => {
+    const top = pacManPosition.top - ghostPosition.top
+    const left = pacManPosition.left - ghostPosition.left
+    let topDirection, leftDirection
+    if (top === 0) topDirection = null
+    else topDirection = top > 0 ? 'toBottom' : 'toTop'
+    if (left === 0) leftDirection = null
+    else leftDirection = left > 0 ? 'toRight' : 'toLeft'
+    return { top, left, topDirection, leftDirection }
+}
+
+const isGameOver = () => {
+    const redGhostPosition = getPositionOf(redGhost)
+    const pinkGhostPosition = getPositionOf(pinkGhost)
+    const pacManPosition = getPositionOf(pacMan)
+    if ((redGhostPosition.top === pacManPosition.top && redGhostPosition.left === pacManPosition.left) 
+        || (pinkGhostPosition.top === pacManPosition.top && pinkGhostPosition.left === pacManPosition.left))
+        {
+        console.log('GAME OVER')
+        return true
+    }
+    return false
+}
 
 addEventListener('keydown', e => {
     switch (e.keyCode) {
         case 37:
-            movePacMan('toLeft');
-            break;
+            movePacMan('toLeft')
+            break
         case 39:
-            movePacMan('toRight');
-            break;
+            movePacMan('toRight')
+            break
         case 38:
-            movePacMan('toTop');
-            break;
+            movePacMan('toTop')
+            break
         case 40:
-            movePacMan('toBottom');
-            break;
-    }
-
-});
-const isTheCharacterBlocked = (characterPositon, movingDirection) => {
-    // Nous déterminons quel tableau est concerné par la direction prise
-    let blockedSquares;
-    switch (movingDirection) {
-        case 'toLeft':
-            blockedSquares = blockedSquaresToLeft;
-            break;
-        case 'toRight':
-            blockedSquares = blockedSquaresToRight;
-            break;
-        case 'toTop':
-            blockedSquares = blockedSquaresToTop;
-            break;
-        case 'toBottom':
-            blockedSquares = blockedSquaresToBottom;
+            movePacMan('toBottom')
             break
     }
-
-    // Nous retournons un booléen indiquant si la position du personnage
-    // est référencéE dans le tableau
-    return blockedSquares.some(square => {
-        const topsAreEquals = characterPositon.top === square.top;
-        const leftsAreEquals = characterPositon.left === square.left;
-        return topsAreEquals && leftsAreEquals
-    })
-};
+})
 
 const displayDots = () => {
     for (let col = 0; col < 10; col++) {
         for (let row = 0; row < 10; row++) {
             const dot = document.createElement('div')
             dot.className = 'dot'
-            dot.style.left = col * 100 + 'px'
-            dot.style.top = row * 100 + 'px'
+            dot.dataset.top = row * 100
+            dot.dataset.left = col * 100
+            dot.style.top = isSmallScreen() ? row * pxToViewportSize(100) + sizeUnit() : row * 100 + sizeUnit()
+            dot.style.left = isSmallScreen() ? col * pxToViewportSize(100) + sizeUnit() : col * 100 + sizeUnit()
             map.insertBefore(dot, pacMan)
         }
     }
 
-    // FAIRE DISPARAITRE LES POINTS
+    // Reste à faire disparaître les 10 pac-gommes superflues
+    removeDot(300, 0)
+    removeDot(300, 100)
+    removeDot(500, 0)
+    removeDot(500, 100)
+    removeDot(300, 800)
+    removeDot(300, 900)
+    removeDot(500, 800)
+    removeDot(500, 900)
+    removeDot(400, 400)
+    removeDot(400, 500)
+}
+const removeDot = (top, left) => {
+    const dot = document.querySelector(`.dot[data-top="${ top }"][data-left="${ left }"]`)
+    if (dot) map.removeChild(dot)
+    return dot
 }
 
-const start = () =>{
-    menu.style.display = 'none';
-    map.style.diplay = 'block';
-    moveRedGhost();
-    moveBlueGhost();
-    moveGreenGhost();
-    displayDots();
+const start = () => {
+    moveRedGhost()
+    movePinkGhost()
+    moveBlueGhost()
+    displayDots()
 }
 
-start();
-// A SUPPRIMER APRÈS
-
-
-// Après avoir créée l'input dans le HTML, nous le référençerons tout en haut de main.js
-
-//
-// NOUS CRÉEONS UNE VARIABLE VIDE AU DEBUT
-// let username
-//
-// submit.addEventListener('click', (e) =>{
-//     e.preventDefault()
-//     VERIFIER ICI QUE inputName.value CONTIENT AU MOINS TROIS CARACTÈRES
-//     username = inputName.value
-//     LANCER LA PARTIE CII
-//         start()
-// })
+start() // À supprimer quand le submit.addEventListener('click', (e) => {}) sera implémenté
