@@ -1,12 +1,11 @@
+/*GÉNÉRAL*/
+
 *,
 :before,
 :after {
     box-sizing: border-box;
 }
 
-img{
-    width: 100%;
-}
 body {
     margin: 0;
     height: 100vh;
@@ -14,28 +13,73 @@ body {
     background-color: black;
 }
 
+/*DIV PARENT*/
+
+.main{
+    position: relative;
+    width: 1000px;
+    height: 1000px;
+    margin: auto;
+}
+
+/*FORMULAIRE */
+
+#menu{
+    background-color: black;
+    width: 1000px;
+    height: 1000px;
+    position: absolute;
+    margin: auto;
+    z-index: 1000;
+}
+.form{
+    text-align: center;
+}
+
+#label{
+    font-family: 'Press Start 2P';
+    font-size: 30px;
+    color: white;
+}
+
+#name{
+    margin-top: 150px;
+    width: 300px;
+    font-family: 'Press Start 2P';
+    font-size: 30px;
+}
+
+button{
+    border: 5px solid white;
+    border-radius: 3px;
+    padding: 30px;
+    font-size: 25px;
+    font-family: 'Press Start 2P';
+    margin-top: 500px;
+    color: yellow;
+    background-color: black;
+}
+
+/*LOGO PACMAN*/
+
 .logo{
     width: 400px;
     margin: auto;
     padding: 50px 0 10px 0;
 }
 
-#menu{
-    background-color: white;
-    width: 1000px;
-    height: 1000px;
-    position: relative;
-    margin: auto;
-}
+
+/*MAP*/
 
 .map {
     background-color: black;
     width: 1000px;
     height: 1000px;
-    position: relative;
+    position: absolute;
     margin: auto;
-    display: none;
 }
+
+/*PERSONNAGES*/
 
 img[src="./img/pacman.gif"] {
     position: absolute;
@@ -72,6 +116,8 @@ img[src="./img/background.svg"] {
     width: 100%;
 }
 
+/*PAD GOMMES*/
+
 .dot {
     position: absolute;
     width: 100px;
@@ -89,6 +135,8 @@ img[src="./img/background.svg"] {
     background-color: #ff6;
 }
 
+/*ROTATION IMAGES PERSONNAGES*/
+
 .toLeft {
     transform: none;
 }
@@ -101,6 +149,8 @@ img[src="./img/background.svg"] {
 .toBottom {
     transform: rotate(-90deg);
 }
+
+/*RESPONSIVE*/
 
 @media (orientation: portrait) and (max-width: 1000px) {
     .map {

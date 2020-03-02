@@ -12,13 +12,18 @@
         width="100%">
     </div>
 
-    <div id="menu">
-        <form action="" method="post">
-            <label for="email">Name</label>
-            <input id="email" type="email" name="email" required><br>
-            <button type="submit">Envoyer</button>
-        </form>
-    </div>
+    <div class="main">
+
+        <div id="menu">
+            <form action="" method="post" class="form">
+                <label for="name" id="label">Name :</label>
+                <input id="name" type="text" name="name" minlength="3" required><br>
+<!--
+                <button type="submit" onclick="hideForm()">Jouer</button>
+-->
+                <button type="submit">Jouer</button>
+            </form>
+        </div>
 
         <div class="map">
             <img src="./img/pacman.gif" alt="Pac-Man" data-top="500" data-left="500">
@@ -28,6 +33,8 @@
             <img src="./img/background.svg" alt="Labyrinthe">
         </div>
     </div>
+    </div>
+
 
 
     <script src="./main.js"></script>

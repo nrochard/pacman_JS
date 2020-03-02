@@ -4,6 +4,9 @@ const pacMan = document.querySelector('img[src="./img/pacman.gif"]')
 const redGhost = document.querySelector('img[src="./img/redGhost.png"]')
 const pinkGhost = document.querySelector('img[src="./img/pinkGhost.png"]')
 const blueGhost = document.querySelector('img[src="./img/blueGhost.png"]')
+const button = document.querySelector('button')
+const menu = document.getElementById('menu')
+const name = document.getElementById('name')
 
 let score = 0
 
@@ -20,9 +23,9 @@ const directions = [ 'toLeft', 'toRight', 'toTop', 'toBottom' ]
 console.log('jeu lancé')
 
 const maxSize = 1000
-const mqlMaxWidth = matchMedia(`(max-width: ${maxSize}px)`)
-const mqlMaxHeight = matchMedia(`(max-height: ${maxSize}px)`)
-const mqlOrientation = matchMedia('(orientation: portrait)')
+const mqlMaxWidth = window.matchMedia(`(max-width: ${maxSize}px)`)
+const mqlMaxHeight = window.matchMedia(`(max-height: ${maxSize}px)`)
+const mqlOrientation = window.matchMedia('(orientation: portrait)')
 
 const sizeUnit = () => {
     let sizeUnit = 'px'
@@ -340,6 +343,19 @@ const displayDots = () => {
     removeDot(400, 400)
     removeDot(400, 500)
 }
+
+
+
+button.addEventListener('click', evt => {
+    evt.preventDefault()
+    if (name.value.length > 3)
+    {
+        menu.style.display = 'none';
+        start();
+    }
+})
+
+
 const removeDot = (top, left) => {
     const dot = document.querySelector(`.dot[data-top="${ top }"][data-left="${ left }"]`)
     if (dot) map.removeChild(dot)
@@ -353,4 +369,4 @@ const start = () => {
     displayDots()
 }
 
-start() // À supprimer quand le submit.addEventListener('click', (e) => {}) sera implémenté
+// start() // À supprimer quand le submit.addEventListener('click', (e) => {}) sera implémenté
