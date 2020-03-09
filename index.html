@@ -1,42 +1,84 @@
 <!DOCTYPE html>
-<html lang="fr-FR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vanilla Pac-Man</title>
+    <title>Title</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="fontawesome-free-5.11.2-web/css/all.css">
 </head>
 <body>
 
-    <div class="logo">
-        <img src="img/pacmanLogo.png"
-        width="100%">
+<div class="main">
+    <div class="title">
+        <center><img src="img/pacmanLogo.png"></center>
     </div>
 
-    <div class="main">
 
-        <div id="menu">
-            <form action="" method="post" class="form">
-                <label for="name" id="label">Name :</label>
-                <input id="name" type="text" name="name" minlength="3" required><br>
-<!--
-                <button type="submit" onclick="hideForm()">Jouer</button>
--->
-                <button type="submit">Jouer</button>
-            </form>
+    <div class="table">
+    <table class="highscore">
+        <tr>
+            <td>
+                <i class="fas fa-trophy"></i>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <i class="fas fa-trophy"></i>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <i class="fas fa-trophy"></i>
+            </td>
+        </tr>
+        <tr>
+            <td>
+             4
+            </td>
+        </tr>
+        <tr>
+            <td>
+                5
+            </td>
+        </tr>
+        <tr>
+            <td>
+                6
+            </td>
+        </tr>
+        <tr>
+            <td>
+                7
+            </td>
+        </tr>
+        <tr>
+            <td>
+                8
+            </td>
+        </tr>
+        <tr>
+            <td>
+                9
+            </td>
+        </tr>
+        <tr>
+            <td>
+                10
+            </td>
+        </tr>
+
+    </table>
+    </div>
+
+    <div class="button">
+        <div class="button2">
+            <img src="img/ghost1.png">
+            <button onclick="window.location.href='index1.html'">Next</button>
+            <img src="img/ghost2.png">
         </div>
 
-        <div class="map">
-            <img src="./img/pacman.gif" alt="Pac-Man" data-top="500" data-left="500">
-            <img src="./img/redGhost.png" alt="Red ghost" data-top="300" data-left="400">
-            <img src="./img/pinkGhost.png" alt="Pink ghost" data-top="300" data-left="400">
-            <img src="./img/blueGhost.png" alt="Blue Ghost" data-top="300" data-left="400">
-            <img src="./img/background.svg" alt="Labyrinthe">
-        </div>
-    </div>
     </div>
 
-
-
-    <script src="./main.js"></script>
+</div>
 </body>
 </html>

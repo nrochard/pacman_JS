@@ -4,11 +4,9 @@ const pacMan = document.querySelector('img[src="./img/pacman.gif"]')
 const redGhost = document.querySelector('img[src="./img/redGhost.png"]')
 const pinkGhost = document.querySelector('img[src="./img/pinkGhost.png"]')
 const blueGhost = document.querySelector('img[src="./img/blueGhost.png"]')
-const button = document.querySelector('button')
-const menu = document.getElementById('menu')
-const name = document.getElementById('name')
 
 let score = 0
+
 
 let pacManInterval
 let redGhostInterval
@@ -19,8 +17,6 @@ let pinkGhostInterval
 let currentRedGhostDirection
 
 const directions = [ 'toLeft', 'toRight', 'toTop', 'toBottom' ]
-
-console.log('jeu lancé')
 
 const maxSize = 1000
 const mqlMaxWidth = window.matchMedia(`(max-width: ${maxSize}px)`)
@@ -148,7 +144,7 @@ const isTheCharacterBlocked = (characterPositon, movingDirection) => {
 // Mouvements du clavier
 const movePacMan = (to) => {
     clearInterval(pacManInterval)
-    
+
     pacMan.className = to
 
     let pacManPosition = getPositionOf(pacMan)
@@ -170,8 +166,8 @@ const movePacMan = (to) => {
             isGameOver()
 
             const meal = removeDot(pacManPosition.top, pacManPosition.left)
-            if (meal) score++
-            console.log('score:', score)
+            if (meal) score++;
+            document.getElementById('playerScore').innerHTML=score;
         }
     }, 250)
 }
@@ -261,7 +257,7 @@ const moveToPacMan = (ghost) => {
     if (delta.topDirection === null) direction = delta.leftDirection
     else if (delta.leftDirection === null) direction = delta.topDirection
     else direction = delta.top < delta.left ? delta.topDirection : delta.leftDirection
-    
+
     if (isTheCharacterBlocked(ghostPosition, direction)) {
         direction = direction === delta.topDirection ? delta.leftDirection : delta.topDirection
         if (direction === null) {
@@ -292,9 +288,9 @@ const isGameOver = () => {
     const redGhostPosition = getPositionOf(redGhost)
     const pinkGhostPosition = getPositionOf(pinkGhost)
     const pacManPosition = getPositionOf(pacMan)
-    if ((redGhostPosition.top === pacManPosition.top && redGhostPosition.left === pacManPosition.left) 
+    if ((redGhostPosition.top === pacManPosition.top && redGhostPosition.left === pacManPosition.left)
         || (pinkGhostPosition.top === pacManPosition.top && pinkGhostPosition.left === pacManPosition.left))
-        {
+    {
         console.log('GAME OVER')
         return true
     }
@@ -346,14 +342,14 @@ const displayDots = () => {
 
 
 
-button.addEventListener('click', evt => {
-    evt.preventDefault()
-    if (name.value.length > 3)
-    {
-        menu.style.display = 'none';
-        start();
-    }
-})
+// button.addEventListener('click', evt => {
+//     evt.preventDefault()
+//     if (name.value.length > 3)
+//     {
+//         menu.style.display = 'none';
+//         start();
+//     }
+// })
 
 
 const removeDot = (top, left) => {
@@ -369,4 +365,5 @@ const start = () => {
     displayDots()
 }
 
+start();
 // start() // À supprimer quand le submit.addEventListener('click', (e) => {}) sera implémenté

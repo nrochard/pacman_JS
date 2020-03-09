@@ -1,4 +1,4 @@
-/*GÉNÉRAL*/
+/*-------------------------------------------------- STYLE GENERAL --------------------------------------------------------------*/
 
 *,
 :before,
@@ -13,73 +13,159 @@ body {
     background-color: black;
 }
 
-/*DIV PARENT*/
+/*LOGO PACMAN*/
+
+img[src="./img/pacmanLogo.png"]
+{
+    display: block;
+    margin: auto;
+}
 
 .main{
-    position: relative;
-    width: 1000px;
-    height: 1000px;
-    margin: auto;
-}
-
-/*FORMULAIRE */
-
-#menu{
     background-color: black;
-    width: 1000px;
-    height: 1000px;
-    position: absolute;
-    margin: auto;
-    z-index: 1000;
-}
-.form{
-    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /*align-items: center;*/
+    justify-content: center;
+    border: 5px dotted #fcc73f;
 }
 
-#label{
-    font-family: 'Press Start 2P';
-    font-size: 30px;
-    color: white;
+/*-------------------------------------------------- PAGE HIGHSCORE (1) --------------------------------------------------------------*/
+
+/*TABLEAU HIGHSCORE*/
+
+.highscore{
+    border: 6px solid #65afdd;
+    margin:3% auto;
+    width: 50vh;
+    border-spacing: 30px;
+    height: 50vh;
 }
 
-#name{
-    margin-top: 150px;
-    width: 300px;
-    font-family: 'Press Start 2P';
+/*COLOR TROPHEYS*/
+
+table tr td i{
     font-size: 30px;
 }
+table tr:first-child i {
+    color: #ffd700;
+}
+
+table tr:nth-child(2) i {
+    color: #c0c0c0;
+}
+
+table tr:nth-child(3) i {
+    color: #cd9932;
+}
+
+/*BOUTON PLAY*/
 
 button{
-    border: 5px solid white;
     border-radius: 3px;
     padding: 30px;
     font-size: 25px;
     font-family: 'Press Start 2P';
-    margin-top: 500px;
-    color: yellow;
     background-color: black;
+    display: block;
+    /*margin: auto;*/
+    color: white;
+    border: 4px solid #fcc73f;
+    margin-right: 50px;
+    margin-left: 50px;
 }
 
-/*LOGO PACMAN*/
+button:hover{
+    border: 4px solid #65afdd;
+}
 
-.logo{
-    width: 400px;
-    margin: auto;
-    padding: 50px 0 10px 0;
+/*COLOR NOM TABLEAU*/
+
+td{
+    font-family: 'Press Start 2P';
+    color: white;
+}
+
+/*DISPLAY FLEX FANTOME AVEC BOUTONS*/
+
+.button2{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+/*-------------------------------------------------- PAGE HIGHSCORE (2) --------------------------------------------------------------*/
+
+/*INSTRUCTIONS*/
+
+.instructions{
+    border: 6px solid #65afdd;
+    margin: 3% auto;
+    width: 50vh;
+    height: 50vh;
+    border-spacing: 30px;
+}
+
+ul{
+    margin-left: 35px;
+    list-style-type: square;
+}
+li{
+    font-family: 'Press Start 2P';
+    color: white;
+    padding: 30px 5px;
+    font-size: 20px;
+}
+
+h2{
+    color: white;
+    font-family: 'Press Start 2P';
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 30px;
+    font-size: 30px;
+}
+
+ul li:first-child i:first-child{
+    color: #52f6db;
+    font-size: 30px;
+}
+
+ul li:first-child i:nth-child(2){
+    color: #e49df5;
+    font-size: 30px;
+}
+
+ul li:first-child i:last-child{
+    color: #d61e00;
+    font-size: 30px;
+}
+
+ul li:nth-child(2) i{
+    color: #fcc73f;
+    font-size: 30px;
+}
+
+/*-------------------------------------------------- PAGE JEUX (3) --------------------------------------------------------------*/
+
+.score{
+    font-size: 30px;
+    text-align: center;
+    font-family: 'Press Start 2P';
+    color: white;
 }
 
 
-/*MAP*/
 
 .map {
-    background-color: black;
+    background-color: #0b0b0b;
     width: 1000px;
     height: 1000px;
-    position: absolute;
-    margin: auto;
+    position: relative;
+    margin: 0 auto;
 }
-
-/*PERSONNAGES*/
 
 img[src="./img/pacman.gif"] {
     position: absolute;
@@ -116,8 +202,6 @@ img[src="./img/background.svg"] {
     width: 100%;
 }
 
-/*PAD GOMMES*/
-
 .dot {
     position: absolute;
     width: 100px;
@@ -132,10 +216,8 @@ img[src="./img/background.svg"] {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: #ff6;
+    background-color: #fcc73f;
 }
-
-/*ROTATION IMAGES PERSONNAGES*/
 
 .toLeft {
     transform: none;
@@ -150,14 +232,8 @@ img[src="./img/background.svg"] {
     transform: rotate(-90deg);
 }
 
-/*RESPONSIVE*/
-
 @media (orientation: portrait) and (max-width: 1000px) {
     .map {
-        width: 100%;
-        height: 100vw;
-    }
-    #menu{
         width: 100%;
         height: 100vw;
     }
@@ -167,19 +243,13 @@ img[src="./img/background.svg"] {
         padding: calc(100vw * 15 / 1000);
         width: calc(100vw * 100 / 1000);
     }
-    img[src="./img/redGhost.png"] {
+    img[src="./img/red-ghost.png"] {
         top: calc(100vw * 300 / 1000);
         left: calc(100vw * 400 / 1000);
         width: calc(100vw * 100 / 1000);
         padding: calc(100vw * 15 / 1000);
     }
-    img[src="./img/pinkGhost.png"] {
-        top: calc(100vw * 300 / 1000);
-        left: calc(100vw * 400 / 1000);
-        width: calc(100vw * 100 / 1000);
-        padding: calc(100vw * 15 / 1000);
-    }
-    img[src="./img/blueGhost.png"] {
+    img[src="./img/pink-ghost.png"] {
         top: calc(100vw * 300 / 1000);
         left: calc(100vw * 400 / 1000);
         width: calc(100vw * 100 / 1000);
@@ -194,45 +264,35 @@ img[src="./img/background.svg"] {
         height: calc(100vw * 20 / 1000);
     }
 }
-@media (orientation: landscape) and (max-height: 1100px) {
+@media (orientation: landscape) and (max-height: 1000px) {
     .map {
         width: 100vh;
         height: 100%;
     }
-    #menu{
-        width: 100vh;
-        height: 100%;
-    }
     img[src="./img/pacman.gif"] {
-        top: calc(100vh * 500 / 1100);
-        left: calc(100vh * 500 / 1100);
-        padding: calc(100vh * 15 / 1100);
-        width: calc(100vh * 100 / 1100);
+        top: calc(100vh * 500 / 1000);
+        left: calc(100vh * 500 / 1000);
+        padding: calc(100vh * 15 / 1000);
+        width: calc(100vh * 100 / 1000);
     }
-    img[src="./img/redGhost.png"] {
-        top: calc(100vh * 300 / 1100);
-        left: calc(100vh * 400 / 1100);
-        width: calc(100vh * 100 / 1100);
-        padding: calc(100vh * 15 / 1100);
+    img[src="./img/red-ghost.png"] {
+        top: calc(100vh * 300 / 1000);
+        left: calc(100vh * 400 / 1000);
+        width: calc(100vh * 100 / 1000);
+        padding: calc(100vh * 15 / 1000);
     }
-    img[src="./img/pinkGhost.png"] {
-        top: calc(100vh * 300 / 1100);
-        left: calc(100vh * 400 / 1100);
-        width: calc(100vh * 100 / 1100);
-        padding: calc(100vh * 15 / 1100);
-    }
-    img[src="./img/blueGhost.png"] {
-        top: calc(100vh * 300 / 1100);
-        left: calc(100vh * 400 / 1100);
-        width: calc(100vh * 100 / 1100);
-        padding: calc(100vh * 15 / 1100);
+    img[src="./img/pink-ghost.png"] {
+        top: calc(100vh * 300 / 1000);
+        left: calc(100vh * 400 / 1000);
+        width: calc(100vh * 100 / 1000);
+        padding: calc(100vh * 15 / 1000);
     }
     .dot {
-        width: calc(100vh * 100 / 1100);
-        height: calc(100vh * 100 / 1100);
+        width: calc(100vh * 100 / 1000);
+        height: calc(100vh * 100 / 1000);
     }
     .dot::before {
-        width: calc(100vh * 20 / 1100);
-        height: calc(100vh * 20 / 1100);
+        width: calc(100vh * 20 / 1000);
+        height: calc(100vh * 20 / 1000);
     }
 }
