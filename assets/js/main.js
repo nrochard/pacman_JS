@@ -1,9 +1,9 @@
 // Variables globales
 const map = document.querySelector('.map')
-const pacMan = document.querySelector('img[src="./img/pacman.gif"]')
-const redGhost = document.querySelector('img[src="./img/redGhost.png"]')
-const pinkGhost = document.querySelector('img[src="./img/pinkGhost.png"]')
-const blueGhost = document.querySelector('img[src="./img/blueGhost.png"]')
+const pacMan = document.querySelector('img[src="assets/img/pacman.gif"]')
+const redGhost = document.querySelector('img[src="assets/img/redGhost.png"]')
+const pinkGhost = document.querySelector('img[src="assets/img/pinkGhost.png"]')
+const blueGhost = document.querySelector('img[src="assets/img/blueGhost.png"]')
 
 let score = 0
 let level = 0;
