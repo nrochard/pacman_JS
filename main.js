@@ -6,7 +6,9 @@ const pinkGhost = document.querySelector('img[src="./img/pinkGhost.png"]')
 const blueGhost = document.querySelector('img[src="./img/blueGhost.png"]')
 
 let score = 0
-
+let level = 0;
+document.getElementById('playerScore').innerHTML=score;
+document.getElementById('level').innerHTML=level;
 
 let pacManInterval
 let redGhostInterval
@@ -163,13 +165,20 @@ const movePacMan = (to) => {
 
             pacManPosition = getPositionOf(pacMan)
 
-            isGameOver()
+            if (isGameOver())
+                document.location.href="game_over.html";
 
             const meal = removeDot(pacManPosition.top, pacManPosition.left)
             if (meal) score++;
             document.getElementById('playerScore').innerHTML=score;
+            if (!(restDot())){
+                level++;
+                document.getElementById('level').innerHTML=level;
+                start();
+                console.log("niceau suivant");
+            }
         }
-    }, 250)
+    }, 200)
 }
 
 const moveRedGhost = () => {
@@ -198,7 +207,9 @@ const moveBlueGhost = () => {
     clearInterval(blueGhostInterval)
 
     let blueGhostPosition = getPositionOf(blueGhost)
-
+    let timing  = 250;
+    if (level === 8)
+        timing = 250
     const randomInt = Math.floor(Math.random() * 4)
     const randomDirection = directions[randomInt] // Soit 'toLeft', 'toRight', 'toTop', 'toBottom'
 
@@ -212,7 +223,7 @@ const moveBlueGhost = () => {
             moveBlueGhost() // La fonction est relancée si le fantôme est bloqué
             return
         }
-    }, 250)
+    }, timing)
 }
 
 
@@ -251,7 +262,6 @@ const moveToPacMan = (ghost) => {
     const pacManPosition = getPositionOf(pacMan)
     const ghostPosition = getPositionOf(ghost)
     const delta = getDelta(pacManPosition, ghostPosition)
-    console.log('delta:', delta)
     let direction
     if (delta.top === delta.left) direction = [delta.topDirection, delta.leftDirection][Math.floor(Math.random() * 2)]
     if (delta.topDirection === null) direction = delta.leftDirection
@@ -287,9 +297,11 @@ const getDelta = (pacManPosition, ghostPosition) => {
 const isGameOver = () => {
     const redGhostPosition = getPositionOf(redGhost)
     const pinkGhostPosition = getPositionOf(pinkGhost)
+    const blueGhostPosition = getPositionOf(blueGhost)
     const pacManPosition = getPositionOf(pacMan)
     if ((redGhostPosition.top === pacManPosition.top && redGhostPosition.left === pacManPosition.left)
-        || (pinkGhostPosition.top === pacManPosition.top && pinkGhostPosition.left === pacManPosition.left))
+        || (pinkGhostPosition.top === pacManPosition.top && pinkGhostPosition.left === pacManPosition.left) ||
+        (blueGhostPosition.top === pacManPosition.top && blueGhostPosition.left == pacManPosition.left) )
     {
         console.log('GAME OVER')
         return true
@@ -351,6 +363,11 @@ const displayDots = () => {
 //     }
 // })
 
+const restDot = () => {
+    const dots = document.querySelectorAll('.dot')
+    return dots.length ? true : false
+}
+
 
 const removeDot = (top, left) => {
     const dot = document.querySelector(`.dot[data-top="${ top }"][data-left="${ left }"]`)
@@ -367,3 +384,4 @@ const start = () => {
 
 start();
 // start() // À supprimer quand le submit.addEventListener('click', (e) => {}) sera implémenté
+
